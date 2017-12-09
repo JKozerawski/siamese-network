@@ -7,7 +7,7 @@ class pairs():
 		self.imagesPath = imagesPath				# path of a directory where are folders with images (each folder - different category)
 		self.noOfPositiveExamples = noOfPositiveExamples	# number of positive ("same") examples per category
 		self.noOfNegativeExamples = noOfNegativeExamples	# number of negative ("different") examples per category
-		self.imgExtension = imgExtension
+		self.imgExtension = imgExtension			# image extension format (.jpg, .JPEG etc)
 
 	def get_all_images_in_lists(self):
 		self.images = []
@@ -24,16 +24,23 @@ class pairs():
 		while(imageA==imageB):
 			imageB = np.random.choice(listB)
 
-		return imageA, imageB
+		return "/".join(imageA.split("/")[-2:]), "/".join(imageB.split("/")[-2:])
 
 	def create_pairs(self):
-		pairsList = []
+		# returns 2D list of the format "[pathToImageA, pathToImageB, label]"
+		
+		pairsList = []	# empty list for all the information
+		# iterate through all the categories in the dataset:
 		for i in xrange(self.noOfCategories):
 			print "Class", i+1,"out of", self.noOfCategories
 			negativeCategoriesList = np.delete(np.arange(0,self.noOfCategories),i)
+
+			# get "noOfPositiveExamples" of pairs with label "1":
 			for k in xrange(self.noOfPositiveExamples):
 				imageA, imageB = self.get_random_two_images(self.images[i], self.images[i])
 				pairsList.append([imageA,imageB,"1"])
+
+			# get "noOfNegativeExamples" of pairs with label "0":
 			for k in xrange(self.noOfNegativeExamples):
 				j = np.random.choice(negativeCategoriesList)
 				imageA, imageB = self.get_random_two_images(self.images[i], self.images[j])
@@ -49,21 +56,23 @@ class pairs():
 		for line in pairsList:
 			# choose randomly if it's a val or train case (split 70/30):
 			if(random.random()>0.3):
-				trainFileLeft+= line[0]+" "+line[2]+"\n"
-				trainFile2Right+= line[1]+" "+line[2]+"\n"
+				trainFileLeft+= line[0]+" "+line[2]+"\n"	# first image path + label
+				trainFileRight+= line[1]+" "+line[2]+"\n"	# second image path + label
 			else:
-				valFileLeft+= line[0]+" "+line[2]+"\n"
-				valFile2Right+= line[1]+" "+line[2]+"\n"
-		f = open('./train_left.txt','w')
+				valFileLeft+= line[0]+" "+line[2]+"\n"		# first image path + label
+				valFileRight+= line[1]+" "+line[2]+"\n"		# second image path + label
+
+		# Save all four files:
+		f = open('./txtfiles/train_left.txt','w')
 		f.write(trainFileLeft)
 		f.close()
-		f = open('./train_right.txt','w')
+		f = open('./txtfiles/train_right.txt','w')
 		f.write(trainFileRight)
 		f.close()
-		f = open('./val_left.txt','w')
+		f = open('./txtfiles/val_left.txt','w')
 		f.write(valFileLeft)
 		f.close()
-		f = open('./val_right.txt','w')
+		f = open('./txtfiles/val_right.txt','w')
 		f.write(valFileRight)
 		f.close()
 		
@@ -75,10 +84,10 @@ class pairs():
 def main():
 	IMAGES_PATH = "/media/jedrzej/SAMSUNG/DATA/ILSVRC2012/TRAIN/"
 
-	trainingPairsGenerator = pairs(IMAGES_PATH, 1000, 5000)
+	trainingPairsGenerator = pairs(IMAGES_PATH, 100, 100)
 	trainingPairsGenerator.get_all_images_in_lists()
 	pairsList = trainingPairsGenerator.create_pairs()
-	trainingPairsGenerator.split_list_into_two_textfiles(pairsList)
+	trainingPairsGenerator.split_list_into_four_textfiles(pairsList)
 
 if __name__ == "__main__":
     main()
