@@ -3,7 +3,7 @@
 # N.B. set the path to the dataset train + val data dirs
 set -e
 
-EXAMPLE=/media/jedrzej/Seagate/DATA/ILSVRC2012/siamese_data	
+EXAMPLE=/home/jedrzej/siamese_data	
 DATA=/media/jedrzej/SAMSUNG/DATA/ILSVRC2012
 TOOLS=/home/jedrzej/work/caffe/tools
 
