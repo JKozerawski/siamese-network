@@ -1,19 +1,25 @@
 name: "SiameseNetwork"
 
 layer {
-  name: "data_left"
+  name: "data"
   type: "Input"
-  top: "data_left"
-  input_param { shape: { dim: 1 dim: 3 dim: 224 dim: 224 } }
+  top: "data"
+  input_param { shape: { dim: 1 dim: 6 dim: 224 dim: 224 } }
 }
+
 
 layer {
-  name: "data_right"
-  type: "Input"
+  name: "slicer_data"
+  type: "Slice"
+  bottom: "data"
+  ## Data with a shape N x 6 x 224 x 224
+  top: "data_left"
   top: "data_right"
-  input_param { shape: { dim: 1 dim: 3 dim: 224 dim: 224 } }
+  slice_param {
+    axis: 1
+    slice_point: 3
+  }
 }
-
 
 #####################################################################################################
 # Build the left part of the Siamese Network:
@@ -23,10 +29,12 @@ layer {
   bottom: "data_left"
   top: "conv1/7x7_s2_left"
   param {
+    name: "conv1/7x7_s2_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "conv1/7x7_s2_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -78,10 +86,12 @@ layer {
   bottom: "pool1/norm1_left"
   top: "conv2/3x3_reduce_left"
   param {
+    name: "conv2/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "conv2/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -109,10 +119,12 @@ layer {
   bottom: "conv2/3x3_reduce_left"
   top: "conv2/3x3_left"
   param {
+    name: "conv2/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "conv2/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -163,10 +175,12 @@ layer {
   bottom: "pool2/3x3_s2_left"
   top: "inception_3a/1x1_left"
   param {
+    name: "inception_3a/1x1_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3a/1x1_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -194,10 +208,12 @@ layer {
   bottom: "pool2/3x3_s2_left"
   top: "inception_3a/3x3_reduce_left"
   param {
+    name: "inception_3a/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3a/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -225,10 +241,12 @@ layer {
   bottom: "inception_3a/3x3_reduce_left"
   top: "inception_3a/3x3_left"
   param {
+    name: "inception_3a/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3a/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -257,10 +275,12 @@ layer {
   bottom: "pool2/3x3_s2_left"
   top: "inception_3a/5x5_reduce_left"
   param {
+    name: "inception_3a/5x5_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3a/5x5_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -288,10 +308,12 @@ layer {
   bottom: "inception_3a/5x5_reduce_left"
   top: "inception_3a/5x5_left"
   param {
+    name: "inception_3a/5x5_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3a/5x5_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -332,10 +354,12 @@ layer {
   bottom: "inception_3a/pool_left"
   top: "inception_3a/pool_proj_left"
   param {
+    name: "inception_3a/pool_proj_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3a/pool_proj_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -372,10 +396,12 @@ layer {
   bottom: "inception_3a/output_left"
   top: "inception_3b/1x1_left"
   param {
+    name: "inception_3b/1x1_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3b/1x1_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -403,10 +429,12 @@ layer {
   bottom: "inception_3a/output_left"
   top: "inception_3b/3x3_reduce_left"
   param {
+    name: "inception_3b/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3b/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -434,10 +462,12 @@ layer {
   bottom: "inception_3b/3x3_reduce_left"
   top: "inception_3b/3x3_left"
   param {
+    name: "inception_3b/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3b/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -466,10 +496,12 @@ layer {
   bottom: "inception_3a/output_left"
   top: "inception_3b/5x5_reduce_left"
   param {
+    name: "inception_3b/5x5_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3b/5x5_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -497,10 +529,12 @@ layer {
   bottom: "inception_3b/5x5_reduce_left"
   top: "inception_3b/5x5_left"
   param {
+    name: "inception_3b/5x5_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3b/5x5_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -541,10 +575,12 @@ layer {
   bottom: "inception_3b/pool_left"
   top: "inception_3b/pool_proj_left"
   param {
+    name: "inception_3b/pool_proj_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3b/pool_proj_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -592,10 +628,12 @@ layer {
   bottom: "pool3/3x3_s2_left"
   top: "inception_4a/1x1_left"
   param {
+    name: "inception_4a/1x1_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4a/1x1_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -623,10 +661,12 @@ layer {
   bottom: "pool3/3x3_s2_left"
   top: "inception_4a/3x3_reduce_left"
   param {
+    name: "inception_4a/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4a/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -654,10 +694,12 @@ layer {
   bottom: "inception_4a/3x3_reduce_left"
   top: "inception_4a/3x3_left"
   param {
+    name: "inception_4a/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4a/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -686,10 +728,12 @@ layer {
   bottom: "pool3/3x3_s2_left"
   top: "inception_4a/5x5_reduce_left"
   param {
+    name: "inception_4a/5x5_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4a/5x5_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -717,10 +761,12 @@ layer {
   bottom: "inception_4a/5x5_reduce_left"
   top: "inception_4a/5x5_left"
   param {
+    name: "inception_4a/5x5_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4a/5x5_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -761,10 +807,12 @@ layer {
   bottom: "inception_4a/pool_left"
   top: "inception_4a/pool_proj_left"
   param {
+    name: "inception_4a/pool_proj_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4a/pool_proj_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -795,17 +843,18 @@ layer {
   bottom: "inception_4a/pool_proj_left"
   top: "inception_4a/output_left"
 }
-
 layer {
   name: "inception_4b/1x1_left"
   type: "Convolution"
   bottom: "inception_4a/output_left"
   top: "inception_4b/1x1_left"
   param {
+    name: "inception_4b/1x1_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4b/1x1_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -833,10 +882,12 @@ layer {
   bottom: "inception_4a/output_left"
   top: "inception_4b/3x3_reduce_left"
   param {
+    name: "inception_4b/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4b/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -864,10 +915,12 @@ layer {
   bottom: "inception_4b/3x3_reduce_left"
   top: "inception_4b/3x3_left"
   param {
+    name: "inception_4b/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4b/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -896,10 +949,12 @@ layer {
   bottom: "inception_4a/output_left"
   top: "inception_4b/5x5_reduce_left"
   param {
+    name: "inception_4b/5x5_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4b/5x5_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -927,10 +982,12 @@ layer {
   bottom: "inception_4b/5x5_reduce_left"
   top: "inception_4b/5x5_left"
   param {
+    name: "inception_4b/5x5_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4b/5x5_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -971,10 +1028,12 @@ layer {
   bottom: "inception_4b/pool_left"
   top: "inception_4b/pool_proj_left"
   param {
+    name: "inception_4b/pool_proj_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4b/pool_proj_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1011,10 +1070,12 @@ layer {
   bottom: "inception_4b/output_left"
   top: "inception_4c/1x1_left"
   param {
+    name: "inception_4c/1x1_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4c/1x1_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1042,10 +1103,12 @@ layer {
   bottom: "inception_4b/output_left"
   top: "inception_4c/3x3_reduce_left"
   param {
+    name: "inception_4c/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4c/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1073,10 +1136,12 @@ layer {
   bottom: "inception_4c/3x3_reduce_left"
   top: "inception_4c/3x3_left"
   param {
+    name: "inception_4c/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4c/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1105,10 +1170,12 @@ layer {
   bottom: "inception_4b/output_left"
   top: "inception_4c/5x5_reduce_left"
   param {
+    name: "inception_4c/5x5_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4c/5x5_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1136,10 +1203,12 @@ layer {
   bottom: "inception_4c/5x5_reduce_left"
   top: "inception_4c/5x5_left"
   param {
+    name: "inception_4c/5x5_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4c/5x5_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1180,10 +1249,12 @@ layer {
   bottom: "inception_4c/pool_left"
   top: "inception_4c/pool_proj_left"
   param {
+    name: "inception_4c/pool_proj_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4c/pool_proj_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1220,10 +1291,12 @@ layer {
   bottom: "inception_4c/output_left"
   top: "inception_4d/1x1_left"
   param {
+    name: "inception_4d/1x1_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4d/1x1_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1251,10 +1324,12 @@ layer {
   bottom: "inception_4c/output_left"
   top: "inception_4d/3x3_reduce_left"
   param {
+    name: "inception_4d/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4d/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1282,10 +1357,12 @@ layer {
   bottom: "inception_4d/3x3_reduce_left"
   top: "inception_4d/3x3_left"
   param {
+    name: "inception_4d/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4d/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1314,10 +1391,12 @@ layer {
   bottom: "inception_4c/output_left"
   top: "inception_4d/5x5_reduce_left"
   param {
+    name: "inception_4d/5x5_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4d/5x5_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1345,10 +1424,12 @@ layer {
   bottom: "inception_4d/5x5_reduce_left"
   top: "inception_4d/5x5_left"
   param {
+    name: "inception_4d/5x5_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4d/5x5_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1389,10 +1470,12 @@ layer {
   bottom: "inception_4d/pool_left"
   top: "inception_4d/pool_proj_left"
   param {
+    name: "inception_4d/pool_proj_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4d/pool_proj_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1431,10 +1514,12 @@ layer {
   bottom: "inception_4d/output_left"
   top: "inception_4e/1x1_left"
   param {
+    name: "inception_4e/1x1_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4e/1x1_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1462,10 +1547,12 @@ layer {
   bottom: "inception_4d/output_left"
   top: "inception_4e/3x3_reduce_left"
   param {
+    name: "inception_4e/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4e/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1493,10 +1580,12 @@ layer {
   bottom: "inception_4e/3x3_reduce_left"
   top: "inception_4e/3x3_left"
   param {
+    name: "inception_4e/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4e/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1525,10 +1614,12 @@ layer {
   bottom: "inception_4d/output_left"
   top: "inception_4e/5x5_reduce_left"
   param {
+    name: "inception_4e/5x5_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4e/5x5_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1556,10 +1647,12 @@ layer {
   bottom: "inception_4e/5x5_reduce_left"
   top: "inception_4e/5x5_left"
   param {
+    name: "inception_4e/5x5_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4e/5x5_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1600,10 +1693,12 @@ layer {
   bottom: "inception_4e/pool_left"
   top: "inception_4e/pool_proj_left"
   param {
+    name: "inception_4e/pool_proj_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4e/pool_proj_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1651,10 +1746,12 @@ layer {
   bottom: "pool4/3x3_s2_left"
   top: "inception_5a/1x1_left"
   param {
+    name: "inception_5a/1x1_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5a/1x1_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1682,10 +1779,12 @@ layer {
   bottom: "pool4/3x3_s2_left"
   top: "inception_5a/3x3_reduce_left"
   param {
+    name: "inception_5a/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5a/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1713,10 +1812,12 @@ layer {
   bottom: "inception_5a/3x3_reduce_left"
   top: "inception_5a/3x3_left"
   param {
+    name: "inception_5a/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5a/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1745,10 +1846,12 @@ layer {
   bottom: "pool4/3x3_s2_left"
   top: "inception_5a/5x5_reduce_left"
   param {
+    name: "inception_5a/5x5_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5a/5x5_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1776,10 +1879,12 @@ layer {
   bottom: "inception_5a/5x5_reduce_left"
   top: "inception_5a/5x5_left"
   param {
+    name: "inception_5a/5x5_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5a/5x5_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1820,10 +1925,12 @@ layer {
   bottom: "inception_5a/pool_left"
   top: "inception_5a/pool_proj_left"
   param {
+    name: "inception_5a/pool_proj_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5a/pool_proj_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1860,10 +1967,12 @@ layer {
   bottom: "inception_5a/output_left"
   top: "inception_5b/1x1_left"
   param {
+    name: "inception_5b/1x1_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5b/1x1_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1891,10 +2000,12 @@ layer {
   bottom: "inception_5a/output_left"
   top: "inception_5b/3x3_reduce_left"
   param {
+    name: "inception_5b/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5b/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1922,10 +2033,12 @@ layer {
   bottom: "inception_5b/3x3_reduce_left"
   top: "inception_5b/3x3_left"
   param {
+    name: "inception_5b/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5b/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1954,10 +2067,12 @@ layer {
   bottom: "inception_5a/output_left"
   top: "inception_5b/5x5_reduce_left"
   param {
+    name: "inception_5b/5x5_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5b/5x5_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -1985,10 +2100,12 @@ layer {
   bottom: "inception_5b/5x5_reduce_left"
   top: "inception_5b/5x5_left"
   param {
+    name: "inception_5b/5x5_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5b/5x5_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2029,10 +2146,12 @@ layer {
   bottom: "inception_5b/pool_left"
   top: "inception_5b/pool_proj_left"
   param {
+    name: "inception_5b/pool_proj_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5b/pool_proj_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2082,10 +2201,12 @@ layer {
   bottom: "data_right"
   top: "conv1/7x7_s2_right"
   param {
+    name: "conv1/7x7_s2_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "conv1/7x7_s2_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2137,10 +2258,12 @@ layer {
   bottom: "pool1/norm1_right"
   top: "conv2/3x3_reduce_right"
   param {
+    name: "conv2/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "conv2/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2168,10 +2291,12 @@ layer {
   bottom: "conv2/3x3_reduce_right"
   top: "conv2/3x3_right"
   param {
+    name: "conv2/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "conv2/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2222,10 +2347,12 @@ layer {
   bottom: "pool2/3x3_s2_right"
   top: "inception_3a/1x1_right"
   param {
+    name: "inception_3a/1x1_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3a/1x1_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2253,10 +2380,12 @@ layer {
   bottom: "pool2/3x3_s2_right"
   top: "inception_3a/3x3_reduce_right"
   param {
+    name: "inception_3a/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3a/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2284,10 +2413,12 @@ layer {
   bottom: "inception_3a/3x3_reduce_right"
   top: "inception_3a/3x3_right"
   param {
+    name: "inception_3a/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3a/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2316,10 +2447,12 @@ layer {
   bottom: "pool2/3x3_s2_right"
   top: "inception_3a/5x5_reduce_right"
   param {
+    name: "inception_3a/5x5_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3a/5x5_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2347,10 +2480,12 @@ layer {
   bottom: "inception_3a/5x5_reduce_right"
   top: "inception_3a/5x5_right"
   param {
+    name: "inception_3a/5x5_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3a/5x5_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2391,10 +2526,12 @@ layer {
   bottom: "inception_3a/pool_right"
   top: "inception_3a/pool_proj_right"
   param {
+    name: "inception_3a/pool_proj_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3a/pool_proj_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2431,10 +2568,12 @@ layer {
   bottom: "inception_3a/output_right"
   top: "inception_3b/1x1_right"
   param {
+    name: "inception_3b/1x1_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3b/1x1_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2462,10 +2601,12 @@ layer {
   bottom: "inception_3a/output_right"
   top: "inception_3b/3x3_reduce_right"
   param {
+    name: "inception_3b/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3b/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2493,10 +2634,12 @@ layer {
   bottom: "inception_3b/3x3_reduce_right"
   top: "inception_3b/3x3_right"
   param {
+    name: "inception_3b/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3b/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2525,10 +2668,12 @@ layer {
   bottom: "inception_3a/output_right"
   top: "inception_3b/5x5_reduce_right"
   param {
+    name: "inception_3b/5x5_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3b/5x5_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2556,10 +2701,12 @@ layer {
   bottom: "inception_3b/5x5_reduce_right"
   top: "inception_3b/5x5_right"
   param {
+    name: "inception_3b/5x5_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3b/5x5_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2600,10 +2747,12 @@ layer {
   bottom: "inception_3b/pool_right"
   top: "inception_3b/pool_proj_right"
   param {
+    name: "inception_3b/pool_proj_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_3b/pool_proj_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2651,10 +2800,12 @@ layer {
   bottom: "pool3/3x3_s2_right"
   top: "inception_4a/1x1_right"
   param {
+    name: "inception_4a/1x1_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4a/1x1_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2682,10 +2833,12 @@ layer {
   bottom: "pool3/3x3_s2_right"
   top: "inception_4a/3x3_reduce_right"
   param {
+    name: "inception_4a/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4a/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2713,10 +2866,12 @@ layer {
   bottom: "inception_4a/3x3_reduce_right"
   top: "inception_4a/3x3_right"
   param {
+    name: "inception_4a/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4a/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2745,10 +2900,12 @@ layer {
   bottom: "pool3/3x3_s2_right"
   top: "inception_4a/5x5_reduce_right"
   param {
+    name: "inception_4a/5x5_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4a/5x5_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2776,10 +2933,12 @@ layer {
   bottom: "inception_4a/5x5_reduce_right"
   top: "inception_4a/5x5_right"
   param {
+    name: "inception_4a/5x5_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4a/5x5_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2820,10 +2979,12 @@ layer {
   bottom: "inception_4a/pool_right"
   top: "inception_4a/pool_proj_right"
   param {
+    name: "inception_4a/pool_proj_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4a/pool_proj_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2862,10 +3023,12 @@ layer {
   bottom: "inception_4a/output_right"
   top: "inception_4b/1x1_right"
   param {
+    name: "inception_4b/1x1_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4b/1x1_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2893,10 +3056,12 @@ layer {
   bottom: "inception_4a/output_right"
   top: "inception_4b/3x3_reduce_right"
   param {
+    name: "inception_4b/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4b/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2924,10 +3089,12 @@ layer {
   bottom: "inception_4b/3x3_reduce_right"
   top: "inception_4b/3x3_right"
   param {
+    name: "inception_4b/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4b/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2956,10 +3123,12 @@ layer {
   bottom: "inception_4a/output_right"
   top: "inception_4b/5x5_reduce_right"
   param {
+    name: "inception_4b/5x5_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4b/5x5_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -2987,10 +3156,12 @@ layer {
   bottom: "inception_4b/5x5_reduce_right"
   top: "inception_4b/5x5_right"
   param {
+    name: "inception_4b/5x5_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4b/5x5_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3031,10 +3202,12 @@ layer {
   bottom: "inception_4b/pool_right"
   top: "inception_4b/pool_proj_right"
   param {
+    name: "inception_4b/pool_proj_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4b/pool_proj_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3071,10 +3244,12 @@ layer {
   bottom: "inception_4b/output_right"
   top: "inception_4c/1x1_right"
   param {
+    name: "inception_4c/1x1_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4c/1x1_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3102,10 +3277,12 @@ layer {
   bottom: "inception_4b/output_right"
   top: "inception_4c/3x3_reduce_right"
   param {
+    name: "inception_4c/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4c/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3133,10 +3310,12 @@ layer {
   bottom: "inception_4c/3x3_reduce_right"
   top: "inception_4c/3x3_right"
   param {
+    name: "inception_4c/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4c/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3165,10 +3344,12 @@ layer {
   bottom: "inception_4b/output_right"
   top: "inception_4c/5x5_reduce_right"
   param {
+    name: "inception_4c/5x5_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4c/5x5_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3196,10 +3377,12 @@ layer {
   bottom: "inception_4c/5x5_reduce_right"
   top: "inception_4c/5x5_right"
   param {
+    name: "inception_4c/5x5_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4c/5x5_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3240,10 +3423,12 @@ layer {
   bottom: "inception_4c/pool_right"
   top: "inception_4c/pool_proj_right"
   param {
+    name: "inception_4c/pool_proj_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4c/pool_proj_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3280,10 +3465,12 @@ layer {
   bottom: "inception_4c/output_right"
   top: "inception_4d/1x1_right"
   param {
+    name: "inception_4d/1x1_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4d/1x1_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3311,10 +3498,12 @@ layer {
   bottom: "inception_4c/output_right"
   top: "inception_4d/3x3_reduce_right"
   param {
+    name: "inception_4d/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4d/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3342,10 +3531,12 @@ layer {
   bottom: "inception_4d/3x3_reduce_right"
   top: "inception_4d/3x3_right"
   param {
+    name: "inception_4d/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4d/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3374,10 +3565,12 @@ layer {
   bottom: "inception_4c/output_right"
   top: "inception_4d/5x5_reduce_right"
   param {
+    name: "inception_4d/5x5_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4d/5x5_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3405,10 +3598,12 @@ layer {
   bottom: "inception_4d/5x5_reduce_right"
   top: "inception_4d/5x5_right"
   param {
+    name: "inception_4d/5x5_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4d/5x5_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3449,10 +3644,12 @@ layer {
   bottom: "inception_4d/pool_right"
   top: "inception_4d/pool_proj_right"
   param {
+    name: "inception_4d/pool_proj_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4d/pool_proj_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3483,17 +3680,18 @@ layer {
   bottom: "inception_4d/pool_proj_right"
   top: "inception_4d/output_right"
 }
-
 layer {
   name: "inception_4e/1x1_right"
   type: "Convolution"
   bottom: "inception_4d/output_right"
   top: "inception_4e/1x1_right"
   param {
+    name: "inception_4e/1x1_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4e/1x1_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3521,10 +3719,12 @@ layer {
   bottom: "inception_4d/output_right"
   top: "inception_4e/3x3_reduce_right"
   param {
+    name: "inception_4e/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4e/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3552,10 +3752,12 @@ layer {
   bottom: "inception_4e/3x3_reduce_right"
   top: "inception_4e/3x3_right"
   param {
+    name: "inception_4e/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4e/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3584,10 +3786,12 @@ layer {
   bottom: "inception_4d/output_right"
   top: "inception_4e/5x5_reduce_right"
   param {
+    name: "inception_4e/5x5_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4e/5x5_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3615,10 +3819,12 @@ layer {
   bottom: "inception_4e/5x5_reduce_right"
   top: "inception_4e/5x5_right"
   param {
+    name: "inception_4e/5x5_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4e/5x5_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3659,10 +3865,12 @@ layer {
   bottom: "inception_4e/pool_right"
   top: "inception_4e/pool_proj_right"
   param {
+    name: "inception_4e/pool_proj_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_4e/pool_proj_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3710,10 +3918,12 @@ layer {
   bottom: "pool4/3x3_s2_right"
   top: "inception_5a/1x1_right"
   param {
+    name: "inception_5a/1x1_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5a/1x1_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3741,10 +3951,12 @@ layer {
   bottom: "pool4/3x3_s2_right"
   top: "inception_5a/3x3_reduce_right"
   param {
+    name: "inception_5a/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5a/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3772,10 +3984,12 @@ layer {
   bottom: "inception_5a/3x3_reduce_right"
   top: "inception_5a/3x3_right"
   param {
+    name: "inception_5a/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5a/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3804,10 +4018,12 @@ layer {
   bottom: "pool4/3x3_s2_right"
   top: "inception_5a/5x5_reduce_right"
   param {
+    name: "inception_5a/5x5_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5a/5x5_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3835,10 +4051,12 @@ layer {
   bottom: "inception_5a/5x5_reduce_right"
   top: "inception_5a/5x5_right"
   param {
+    name: "inception_5a/5x5_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5a/5x5_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3879,10 +4097,12 @@ layer {
   bottom: "inception_5a/pool_right"
   top: "inception_5a/pool_proj_right"
   param {
+    name: "inception_5a/pool_proj_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5a/pool_proj_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3919,10 +4139,12 @@ layer {
   bottom: "inception_5a/output_right"
   top: "inception_5b/1x1_right"
   param {
+    name: "inception_5b/1x1_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5b/1x1_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3950,10 +4172,12 @@ layer {
   bottom: "inception_5a/output_right"
   top: "inception_5b/3x3_reduce_right"
   param {
+    name: "inception_5b/3x3_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5b/3x3_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -3981,10 +4205,12 @@ layer {
   bottom: "inception_5b/3x3_reduce_right"
   top: "inception_5b/3x3_right"
   param {
+    name: "inception_5b/3x3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5b/3x3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -4013,10 +4239,12 @@ layer {
   bottom: "inception_5a/output_right"
   top: "inception_5b/5x5_reduce_right"
   param {
+    name: "inception_5b/5x5_reduce_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5b/5x5_reduce_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -4044,10 +4272,12 @@ layer {
   bottom: "inception_5b/5x5_reduce_right"
   top: "inception_5b/5x5_right"
   param {
+    name: "inception_5b/5x5_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5b/5x5_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -4088,10 +4318,12 @@ layer {
   bottom: "inception_5b/pool_right"
   top: "inception_5b/pool_proj_right"
   param {
+    name: "inception_5b/pool_proj_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
+    name: "inception_5b/pool_proj_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -4133,5 +4365,56 @@ layer {
     stride: 1
   }
 }
+
+layer {
+  name: "diff"
+  type: "Eltwise"
+  bottom: "pool5/7x7_s1_left"
+  bottom: "pool5/7x7_s1_right"
+  top: "diff"
+  eltwise_param {
+    operation: SUM
+    coeff: 1
+    coeff: -1
+  }
+}
+layer {
+  name: "absdiff"
+  bottom: "diff"
+  top: "absdiff"
+  type: "AbsVal"
+}
+layer {
+  name: "dist"
+  type: "InnerProduct"
+  bottom: "absdiff"
+  top: "dist"
+  param {
+    name: "distfeat_w"
+    lr_mult: 1
+  }
+  param {
+    name: "distfeat_b"
+    lr_mult: 0
+  }
+  inner_product_param {
+    num_output: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "prob"
+  type: "Sigmoid"
+  bottom: "dist"
+  top: "prob"
+}
+
+
 
 
