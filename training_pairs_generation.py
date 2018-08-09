@@ -97,11 +97,16 @@ if __name__ == "__main__":
 		default=100,
 		help="Number of positive examples per category"
 		)
-
+	parser.add_argument(
+		'--txt_dir',
+		type=str,
+		default="./txtFiles/",
+		help="Directory where text files will be saved"
+		)
 	FLAGS = parser.parse_args()
 	trainingPairsGenerator = pairs(FLAGS.dir, FLAGS.examples, FLAGS.examples)
 	trainingPairsGenerator.get_all_images_in_lists()
 	pairsList = trainingPairsGenerator.create_pairs()
-	trainingPairsGenerator.split_list_into_four_textfiles(pairsList)
+	trainingPairsGenerator.split_list_into_four_textfiles(pairsList, FLAGS.txt_dir)
 
 

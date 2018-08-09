@@ -23,7 +23,24 @@ Training data is coming from the ILSVRC 2012. For every category there is 100 po
 ## Training
 If you want to train your own Siamese Network - you can download the caffemodel file in here [Drive](https://drive.google.com/open?id=1xFCv3cj-MIr3nKU6CoTmWIazb6bMSmqz). Both arms of the Siamese have copied weights from the Inception V1, so it's not training from scratch.
 
-To be completed
+1. Create training data pairs using:
+	```
+	python training_paris_generation.py --dir pathToImages --examples numOfExamplesPerCategory
+	```
+2. Previous step will create 4 text files (train_left, train_rigth, val_left and val_right) in the directory pointed by the --txt_dir flag ("./txtFiles/" as a default). Copy those files to your ILSVRC folder. Now you can use those text files to create lmdb files to use for training the network. To do this you have to change the following paths in the create_siamese_lmdb.sh:
+- EXAMPLE=/home/jedrzej/siamese_data	
+- DATA=/media/jedrzej/SAMSUNG/DATA/ILSVRC2012
+- TOOLS=/home/jedrzej/work/caffe/tools
+- TRAIN_DATA_ROOT=/media/jedrzej/SAMSUNG/DATA/ILSVRC2012/TRAIN/
+- VAL_DATA_ROOT=/media/jedrzej/SAMSUNG/DATA/ILSVRC2012/TRAIN/
+
+3. Run the script:
+	```
+	./create_siamese_lmdb.sh
+	```
+
+4. Now you can download train_val.prototxt file from link above. Remember to modify paths to your lmdb paths in the file.
+5. Perform either training from scratch or finetune (either from the copied [Inception V1](https://drive.google.com/open?id=1xFCv3cj-MIr3nKU6CoTmWIazb6bMSmqz) or from our [model](https://drive.google.com/open?id=1KhKtjOOYhI38tyhjRH2GjolpuHgq0vcO) trained on ILSVRC2012.
 
 ## Testing
 In the test.py file we use feature extraction script (using Inception V1 network) to do preprocessing of images.
