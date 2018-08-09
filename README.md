@@ -30,6 +30,6 @@ In the test.py file we use feature extraction script (using Inception V1 network
 If you want to use our test.py file - please download the Inception V1 .caffemodel and deploy file from [here](https://drive.google.com/file/d/1WctmdPPkMCu7XFuAFixruG_a55grGiFP/view?usp=sharing). Make sure to point to the directory where the model is with the --inception_model_dir flag when using the test.py
 
 To test the network just run our example:
-'''
+```
 python test.py --model_dir pathToTheSiameseNetwork --inception_model_dir pathToTheInceptionNetwork --imageL pathToTheLeftImage --imageR pathToTheRightImage
-'''
+```
