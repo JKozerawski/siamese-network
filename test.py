@@ -3,13 +3,13 @@ import caffe
 from caffe_feature_extractor import CaffeFeatureExtractor
 
 def preprocess(image_path):
-	image = caffe.io.load(image_path)	# load the image
+	image = caffe.io.load(image_path, extractionNet)	# load the image
 	return np.asarray(extractionNet.transformer.preprocess("data",image)/255.)	# preprocess the image
 	
-def run_siamese(net, imageL_path, imageR_path):
+def run_siamese(net, extractionNet, imageL_path, imageR_path):
 	# read and preprocess images:
-	imageL = preprocess(imageL_path)
-	imageR = preprocess(imageR_path)
+	imageL = preprocess(imageL_path, extractionNet)
+	imageR = preprocess(imageR_path, extractionNet)
 	
 	# prepare network input:
 	network_input = np.zeros((1,6,224,224))
@@ -58,5 +58,5 @@ if __name__ == "__main__":
 		mean_values = [104.0, 117.0, 123.0]		
 		)
 	siameseNet = caffe.Net(FLAGS.model_dir+"deploy.prototxt", FLAGS.model_dir+"siamese_iter_10000.caffemodel", caffe.TEST)
-    	score = run_siamese(siameseNet, FLAGS.imageL, FLAGS.imageR)
+    	score = run_siamese(siameseNet, extractionNet, FLAGS.imageL, FLAGS.imageR)
 	print "Calculated similarity score between the images:", score
