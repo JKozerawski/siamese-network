@@ -21,4 +21,6 @@ If you want to train your own Siamese Network - you can download the caffemodel 
 To be completed
 
 ## Testing
+In the test.py file we use feature extraction script (using Inception V1 network) to do preprocessing of images.
+If you want to use our test.py file - please download the Inception V1 .caffemodel and deploy file from [here](https://drive.google.com/file/d/1WctmdPPkMCu7XFuAFixruG_a55grGiFP/view?usp=sharing). Make sure to point to the directory where the model is with the --inception_model_dir flag when using the test.py 
 To be completed
