@@ -1,6 +1,8 @@
 from glob import glob
 import numpy as np
 import random
+import argparse
+import os
 
 class pairs():
 	def __init__(self, imagesPath, noOfPositiveExamples, noOfNegativeExamples, imgExtension = "JPEG"):
@@ -47,7 +49,7 @@ class pairs():
 				pairsList.append([imageA,imageB,"0"])
 		return pairsList
 
-	def split_list_into_four_textfiles(self, pairsList):
+	def split_list_into_four_textfiles(self, pairsList, txtFilesDir = "./txtFiles/"):
 		trainFileLeft = ""
 		trainFileRight = ""
 		valFileLeft = ""
@@ -63,31 +65,43 @@ class pairs():
 				valFileRight+= line[1]+" "+line[2]+"\n"		# second image path + label
 
 		# Save all four files:
-		f = open('./txtfiles/train_left.txt','w')
+		if(not os.path.exists(txtFilesDir)):
+			os.makedirs(txtFilesDir)		# create the folder if one does not exist
+		f = open(txtFilesDir+"train_left.txt","w")
 		f.write(trainFileLeft)
 		f.close()
-		f = open('./txtfiles/train_right.txt','w')
+		f = open(txtFilesDir+"train_right.txt","w")
 		f.write(trainFileRight)
 		f.close()
-		f = open('./txtfiles/val_left.txt','w')
+		f = open(txtFilesDir+"val_left.txt","w")
 		f.write(valFileLeft)
 		f.close()
-		f = open('./txtfiles/val_right.txt','w')
+		f = open(txtFilesDir+"val_right.txt","w")
 		f.write(valFileRight)
 		f.close()
-		
 			
-		
-					
 
 #------------------------------------------------------------------
-def main():
-	IMAGES_PATH = "/media/jedrzej/SAMSUNG/DATA/ILSVRC2012/TRAIN/"
 
-	trainingPairsGenerator = pairs(IMAGES_PATH, 100, 100)
+if __name__ == "__main__":
+	parser = argparse.ArgumentParser()
+	parser.add_argument(
+		'--dir',
+		type=str,
+		default="",
+		help="Directory where are stored images (folders of images)"
+		)
+	parser.add_argument(
+		'--examples',
+		type=int,
+		default=100,
+		help="Number of positive examples per category"
+		)
+
+	FLAGS = parser.parse_args()
+	trainingPairsGenerator = pairs(FLAGS.dir, FLAGS.examples, FLAGS.examples)
 	trainingPairsGenerator.get_all_images_in_lists()
 	pairsList = trainingPairsGenerator.create_pairs()
 	trainingPairsGenerator.split_list_into_four_textfiles(pairsList)
 
-if __name__ == "__main__":
-    main()
+
