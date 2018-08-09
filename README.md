@@ -1,4 +1,4 @@
-# siamese-network
+# Siamese Network using Inception V1
 Caffe implementation of the Siamese Neural Network for image data
 
 
@@ -10,7 +10,8 @@ Network was trained using categories coming from the ILSVRC 2012 challange.
 Used net surgery to duplicate the Inception Network and copy its pretrained weights to its Siamese version.
 
 ## Pretrained model:
-You can download the pretrained Caffe model files in here: [Drive](https://drive.google.com/open?id=1KhKtjOOYhI38tyhjRH2GjolpuHgq0vcO)
+You can download the pretrained Caffe model files in here: [Drive](https://drive.google.com/open?id=1KhKtjOOYhI38tyhjRH2GjolpuHgq0vcO).
+Unpack the files to the directory of your choosing (we suggest the "./model/") - remember to point to this directory with the --model_dir flag if you would like to use our test.py script.
 
 ## Training data
 Training data is coming from the ILSVRC 2012. For every category there is 100 positive pairs (same category - labeled "1") and 100 negative pairs (different categories - labeled "0"). That gives 200 000 pairs split 70-30 to train and val sets.
