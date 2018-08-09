@@ -58,4 +58,5 @@ if __name__ == "__main__":
 		mean_values = [104.0, 117.0, 123.0]		
 		)
 	siameseNet = caffe.Net(FLAGS.model_dir+"deploy.prototxt", FLAGS.model_dir+"siamese_iter_10000.caffemodel", caffe.TEST)
-    	run_siamese(siameseNet, FLAGS.imageL, FLAGS.imageR)
+    	score = run_siamese(siameseNet, FLAGS.imageL, FLAGS.imageR)
+	print "Calculated similarity score between the images:", score

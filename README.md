@@ -11,6 +11,7 @@ Used net surgery to duplicate the Inception Network and copy its pretrained weig
 
 ## Pretrained model:
 You can download the pretrained Caffe model files in here: [Drive](https://drive.google.com/open?id=1KhKtjOOYhI38tyhjRH2GjolpuHgq0vcO).
+
 Unpack the files to the directory of your choosing (we suggest the "./model/") - remember to point to this directory with the --model_dir flag if you would like to use our test.py script.
 
 ## Training data
@@ -23,5 +24,9 @@ To be completed
 
 ## Testing
 In the test.py file we use feature extraction script (using Inception V1 network) to do preprocessing of images.
-If you want to use our test.py file - please download the Inception V1 .caffemodel and deploy file from [here](https://drive.google.com/file/d/1WctmdPPkMCu7XFuAFixruG_a55grGiFP/view?usp=sharing). Make sure to point to the directory where the model is with the --inception_model_dir flag when using the test.py 
-To be completed
+If you want to use our test.py file - please download the Inception V1 .caffemodel and deploy file from [here](https://drive.google.com/file/d/1WctmdPPkMCu7XFuAFixruG_a55grGiFP/view?usp=sharing). Make sure to point to the directory where the model is with the --inception_model_dir flag when using the test.py
+
+To test the network just run our example:
+
+python test.py --model_dir pathToTheSiameseNetwork --inception_model_dir pathToTheInceptionNetwork --imageL pathToTheLeftImage --imageR pathToTheRightImage
+
